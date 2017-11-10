@@ -13,13 +13,15 @@ class BookList extends Component {
         return null;
     }
 
+    
+
     renderBooks(books) {
         
         if(books !== null) {
             return books.map((book, index) => {
                 return( 
                     <li key={index} >
-                        <Book key={index} shelf={book.shelf} authors={book.authors} title={book.title} thumbnail={book.imageLinks.thumbnail} />
+                        <Book key={index} book={book} updateShelf={this.props.updateShelf} />
                     </li>
                 )
             });
@@ -34,7 +36,7 @@ class BookList extends Component {
 
         return(
         <div className="bookshelf">
-            <h2 className="bookshelf-title">{this.props.title}</h2>
+            {this.props.title && <h2 className="bookshelf-title">{this.props.title}</h2>}
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     <li>

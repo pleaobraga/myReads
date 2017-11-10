@@ -10,9 +10,26 @@ class BooksApp extends Component {
   }
 
   getAllShelfBooks() {
-    BooksAPI.getAll().then((books) => {
+    BooksAPI.getAll()
+    .then((books) => {
         this.setState({books});
+    })
+    // .catch((e) => alert("error getting the books"))
+      
+  }
+
+  updateShelf(book, shelf) {
+
+    this.state.books.filter((stateBook) => {
+      if(book.id == stateBook.id) {
+        stateBook.shelf = shelf;
+      }
     });
+
+    this.setState({books: this.state.books});
+
+    BooksAPI.update(book, shelf)
+    .catch((e) => alert("error update the book shelf")) 
   }
 
   componentDidMount() {
@@ -49,11 +66,11 @@ class BooksApp extends Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <div>
-                <BookList title="Currently Reading" books={this.state.books} filter="currentlyReading" />
-                <BookList title="Want to Read" books={this.state.books} filter="wantToRead" />
-                <BookList title="Read" books={this.state.books} filter="read" />
-              </div>
+            <div>
+              <BookList title="Currently Reading" books={this.state.books} filter="currentlyReading" updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}}  />
+              <BookList title="Want to Read" books={this.state.books} filter="wantToRead"  updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}} />
+              <BookList title="Read" books={this.state.books} filter="read" updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}} />
+            </div>
             </div>
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
