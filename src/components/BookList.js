@@ -30,23 +30,40 @@ class BookList extends Component {
         return null;
     }
 
+    
     render() {
+        
+        let books;
 
-        let books = this.filterShelfBooks();
+        this.props.searchList ? { books } = this.props : books = this.filterShelfBooks();
 
         return(
-        <div className="bookshelf">
-            {this.props.title && <h2 className="bookshelf-title">{this.props.title}</h2>}
-            <div className="bookshelf-books">
-                <ol className="books-grid">
-                    <li>
-                        <ol className="books-grid">
-                            {this.renderBooks(books)}
-                        </ol>
-                    </li>
-                </ol>
+        <span>
+            { this.props.searchList ? (
+                <div className="search-books-results">
+                    <ol className="books-grid">
+                        <li>
+                            <ol className="books-grid">
+                                {this.renderBooks(books)}
+                            </ol>
+                        </li>
+                    </ol>
+              </div>
+            ) : (
+                <div className="bookshelf">
+                {this.props.title && <h2 className="bookshelf-title">{this.props.title}</h2>}
+                <div className="bookshelf-books">
+                    <ol className="books-grid">
+                        <li>
+                            <ol className="books-grid">
+                                {this.renderBooks(books)}
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
             </div>
-        </div>
+            )}
+        </span>
         )
     }
 }
