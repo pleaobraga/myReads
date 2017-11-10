@@ -1,27 +1,29 @@
 import React, { Component } from 'react'
-import * as BooksAPI from '../BooksAPI'
 import '../App.css'
 import Book from './Book'
 
 class BookList extends Component {
 
-
-    getBooks() {
-        books = BooksAPI.search(shelf)
-    }
-
     renderBooks() {
-        return(
-            books.foreach((book) => {
-                <li><Book authors={book.authors} title={book.title} previewLink={book.previewLink} /></li>
-            })
-        )
+
+        if(this.props.books !== null) {
+            return this.props.books.map((book, index) => {
+                    return( 
+                        <li>
+                            <Book key={index} shelf={book.shelf} authors={book.authors} title={book.title} thumbnail={book.imageLinks.thumbnail} />
+                        </li>
+                    )
+                });
+        }
+
+
+        return null;
     }
 
     render() {
         return(
         <ol className="books-grid">
-           {renderBooks}
+           {this.renderBooks()}
         </ol>
         )
     }

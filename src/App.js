@@ -3,6 +3,7 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import BookCase from './components/BookCase'
 
+
 class BooksApp extends Component {
   state = {
     /**
@@ -11,7 +12,18 @@ class BooksApp extends Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
+    showSearchPage: false,
+    books: []
+  }
+
+  getAllShelfBooks() {
+    BooksAPI.getAll().then((books) => {
+        this.setState({books});
+    });
+  }
+
+  componentDidMount() {
+    this.getAllShelfBooks();
   }
 
   render() {
@@ -45,9 +57,9 @@ class BooksApp extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookCase title="Currently Reading" />
-                <BookCase title="Want to Read" />
-                <BookCase title="Read" />
+                <BookCase title="Currently Reading" books={this.state.books} filter="currentlyReading" />
+                <BookCase title="Want to Read" books={this.state.books} filter="wantToRead" />
+                <BookCase title="Read" books={this.state.books} filter="read" />
               </div>
             </div>
             <div className="open-search">
