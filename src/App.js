@@ -1,18 +1,11 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import BookCase from './components/BookCase'
+import BookList from './components/BookList'
 
 
 class BooksApp extends Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false,
     books: []
   }
 
@@ -57,9 +50,9 @@ class BooksApp extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookCase title="Currently Reading" books={this.state.books} filter="currentlyReading" />
-                <BookCase title="Want to Read" books={this.state.books} filter="wantToRead" />
-                <BookCase title="Read" books={this.state.books} filter="read" />
+                <BookList title="Currently Reading" books={this.state.books} filter="currentlyReading" />
+                <BookList title="Want to Read" books={this.state.books} filter="wantToRead" />
+                <BookList title="Read" books={this.state.books} filter="read" />
               </div>
             </div>
             <div className="open-search">
