@@ -1,28 +1,28 @@
 import React, { Component } from 'react'
 import * as BooksAPI from '../BooksAPI'
 import '../App.css'
-import BookList from './BookList'
+import BookListShelf from './BookListShelf'
 import { Link } from 'react-router-dom'
 
 
 class BookCase extends Component {
-  state = {
-    books: []
+
+  constructor() {
+    super();
+    this.state = { books: [] };    
   }
 
   getAllShelfBooks() {
     BooksAPI.getAll()
-    .then((books) => {
-        this.setState({books});
-    })
-    .catch((e) => alert("error getting the books"));
+    .then((books) => this.setState({books}))
+    .catch((e) => console.log("error getting the books"));
   }
 
   updateShelf(book, shelf) {
     this.setState({books: this.state.books});
 
     BooksAPI.update(book, shelf)
-    .catch((e) => alert("error update the book shelf")) 
+    .catch((e) => console.log("error update the book shelf")) 
   }
 
   componentDidMount() {
@@ -30,6 +30,9 @@ class BookCase extends Component {
   }
 
   render() {
+
+    let { books } = this.state;
+
     return (
       <div className="app">
           <div className="list-books">
@@ -37,11 +40,20 @@ class BookCase extends Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-            <div>
-              <BookList title="Currently Reading" books={this.state.books} filter="currentlyReading" updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}}  />
-              <BookList title="Want to Read" books={this.state.books} filter="wantToRead"  updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}} />
-              <BookList title="Read" books={this.state.books} filter="read" updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}} />
-            </div>
+              <div>
+                <BookListShelf  title="Currently Reading" 
+                                books={books} 
+                                filter="currentlyReading" 
+                                updateShelf={this.updateShelf.bind(this)}  />
+                <BookListShelf  title="Want to Read" 
+                                books={books} 
+                                filter="wantToRead" 
+                                updateShelf={this.updateShelf.bind(this)} />
+                <BookListShelf  title="Read" 
+                                books={books} 
+                                filter="read" 
+                                updateShelf={this.updateShelf.bind(this)} />
+              </div>
             </div>
             <div className="open-search">
               <Link to="/search" >Add a book</Link>

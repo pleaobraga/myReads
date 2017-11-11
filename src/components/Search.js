@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import * as BooksAPI from '../BooksAPI'
 import '../App.css'
-import BookList from './BookList'
-import _ from 'lodash'
+import BookListSearch from './BookListSearch'
 import { Link } from 'react-router-dom'
-
 
 class Search extends Component {
 
@@ -32,8 +30,8 @@ class Search extends Component {
     bookSearch(query) {
         BooksAPI.search(query)
         .then((books) => {
-            books.map((book) => { this.insertTypeShelf(book); return book; });
-            this.setState({books: (books !== undefined && !books.error) ? books : [] });
+            !(books === undefined || books.error) && books.map((book) => { this.insertTypeShelf(book); return book; });
+            this.setState({books: (books === undefined || books.error) ? [] : books  });
         });
     }
 
@@ -57,16 +55,13 @@ class Search extends Component {
                 <div className="search-books-bar">
                     <Link className="close-search" to="/" >Close</Link>
                     <div className="search-books-input-wrapper">
-                        <input  
-                            type="text" 
-                            placeholder="Search by title or author" 
-                            onChange={this.onInputChange.bind(this)} />
+                        <input  type="text" 
+                                placeholder="Search by title or author" 
+                                onChange={this.onInputChange.bind(this)} />
                     </div>
                 </div>
-                <BookList 
-                    books={this.state.books} 
-                    updateShelf={this.updateShelf} 
-                    searchList={true} />
+                <BookListSearch books={this.state.books} 
+                                updateShelf={this.updateShelf.bind(this)} />
             </div>
         </div>)   
     }
