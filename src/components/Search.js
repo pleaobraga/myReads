@@ -10,9 +10,7 @@ class Search extends Component {
 
     constructor() {
         super();
-        this.state = {
-            books: []
-        }
+        this.state = { books: [], booksShelf: []};
     }
     
     updateShelf (book, shelf) {
@@ -20,19 +18,22 @@ class Search extends Component {
         this.setState({books: this.state.books});
 
         BooksAPI.update(book, shelf)
-        .catch((e) => alert("error update the book shelf")) 
+        .catch((e) => console.log("error update the book shelf")) 
+    }
+
+    insertTypeShelf(book) {
+        this.state.booksShelf.forEach((bookShelf) => {
+            if(book.id === bookShelf.id)
+                book.shelf = bookShelf.shelf; 
+        });
     }
 
 
     bookSearch(query) {
         BooksAPI.search(query)
         .then((books) => {
-            if(books !== undefined && !books.error) {
-                this.setState({books});                
-            } else {
-                this.setState({books : []});  
-            }
-
+            books.map((book) => { this.insertTypeShelf(book); return book; });
+            this.setState({books: (books !== undefined && !books.error) ? books : [] });
         });
     }
 
@@ -42,23 +43,32 @@ class Search extends Component {
         this.bookSearch(query)
     }
 
+    componentDidMount() {
+        BooksAPI.getAll()
+        .then((books) => {
+            this.setState({booksShelf: (books !== undefined && !books.error) ? books : [] });
+        });
+    }
+
     render() {
-
-        
-
         return (
         <div className="app">
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link className="close-search" to="/" >Close</Link>
                     <div className="search-books-input-wrapper">
-                        <input type="text" placeholder="Search by title or author" onChange={this.onInputChange.bind(this)} />
+                        <input  
+                            type="text" 
+                            placeholder="Search by title or author" 
+                            onChange={this.onInputChange.bind(this)} />
                     </div>
                 </div>
-                <BookList books={this.state.books} updateShelf={  (book, shelf) => {this.updateShelf(book, shelf)}} searchList={true} />
+                <BookList 
+                    books={this.state.books} 
+                    updateShelf={this.updateShelf} 
+                    searchList={true} />
             </div>
-        </div>
-        )   
+        </div>)   
     }
 }
 
