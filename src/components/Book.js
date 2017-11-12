@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import '../App.css'
 
-class Book extends Component {
+function Book(props) {
 
-    renderAuthors() {
-        if(this.props.book.authors) {
+    let { book } = props;
+
+    function renderAuthors() {
+        if(book.authors) {
             return(
-                this.props.book.authors.forEach((author) => {
+                book.authors.forEach((author) => {
                     <div className="book-authors">{author}</div>
                 })    
             )
@@ -15,35 +17,32 @@ class Book extends Component {
         return null;
     }
 
-    updateBookShelf(event) {
+    function updateBookShelf(event) {
         let shelf = event.target.value;
-        this.props.book.shelf = shelf;
-        this.props.updateShelf(this.props.book,shelf)
+        book.shelf = shelf;
+        props.updateShelf(book,shelf)
     }
 
-    render() {
 
-
-
-        return(
-        <div className="book">
-            <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}></div>
-            <div className="book-shelf-changer">
-                <select value={this.props.book.shelf || "none"} onChange={this.updateBookShelf.bind(this)} >
-                    <option value="" disabled>Move to...</option>
-                    <option value="currentlyReading">Currently Reading</option>
-                    <option value="wantToRead">Want to Read</option>
-                    <option value="read">Read</option>
-                    <option value="none">None</option>
-                </select>
-            </div>
-            </div>
-            <div className="book-title">{this.props.book.title}</div>
-            {this.renderAuthors()}
-        </div>      
-        )
-    }
+    return(
+    <div className="book">
+        <div className="book-top">
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
+        <div className="book-shelf-changer">
+            <select value={book.shelf || "none"} onChange={updateBookShelf} >
+                <option value="" disabled>Move to...</option>
+                <option value="currentlyReading">Currently Reading</option>
+                <option value="wantToRead">Want to Read</option>
+                <option value="read">Read</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        </div>
+        <div className="book-title">{book.title}</div>
+        {renderAuthors()}
+    </div>      
+    )
+    
 }
 
 export default Book
